@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 // 引入session模块
 var session = require('express-session');
-// 处理文件上传
+// 文件上传处理
 const formidableMiddleware = require('express-formidable');
 // web服务器
 const app = express();

@@ -87,4 +87,45 @@ $('#modifyBox').on('submit','#modifyForm',function () {
     });
     //阻止表单默认提交
     return false;
+});
+
+//删除单个用户
+$('#userBox').on('click','.delete',function () {  
+    //如果管理员确认要删除用户
+    if(confirm('确认删除？')){
+        //获取到即将要删除的用户id
+        var id = $(this).attr('data-id');
+        //向服务器端发送请求 删除用户
+        $.ajax({
+            type: "delete",
+            url: "/users/"+id,
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+});
+
+//获取全选按钮
+var selectAll = $('#selectAll');
+//当全选按钮状态发生改变时
+selectAll.on('change',function () {  
+    //获取到全选按钮当前的状态
+    var status = $(this).prop('checked');
+    //获取到所有的用户\
+    //获取到所有的用户并将用户的状态和全选按钮保持一致
+    $('#userBox').find('input').prop('checked',status);
+})
+//当用户前面的复选框状态发生改变时
+$('#userBox').on('change','.userStatus',function () {
+    //获取到所有用户 在所有用户中过滤选中的用户
+    //判断选中的用户数量和所有用户的数量是否一致
+    //如果 一致 说明全部选中
+    var inputs = $('#userBox').find('input');
+    //filter有过滤的意思 :checked 加起来就是在过滤的用户中选择选中的用户
+    if(inputs.length ==inputs.filter(':checked').length){
+        selectAll.prop('checked',true);
+    }else{
+        selectAll.prop('checked',false);
+    }
 })

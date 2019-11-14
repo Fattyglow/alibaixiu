@@ -34,7 +34,7 @@ $('#modifyBox').on('change','#avatar',function () {
          //不要设置请求参数的类型
          contentType:false,
          success: function (response) {
-             console.log(response);
+            //  console.log(response);
              //attr自定义或者内置的属性值
              //实现头像预览功能
              $('#preview').attr('src',response[0].avatar);
@@ -108,11 +108,19 @@ $('#userBox').on('click','.delete',function () {
 
 //获取全选按钮
 var selectAll = $('#selectAll');
+//获取批量删除按钮
+var deleteMany = $('#deleteMany');
 //当全选按钮状态发生改变时
 selectAll.on('change',function () {  
     //获取到全选按钮当前的状态
-    var status = $(this).prop('checked');
-    //获取到所有的用户\
+    var status = $(this).prop('checked');  
+    if(status){
+        //显示批量删除按钮
+        deleteMany.show();
+    }else{
+        //隐藏批量删除按钮
+        deleteMany.hide();
+    }
     //获取到所有的用户并将用户的状态和全选按钮保持一致
     $('#userBox').find('input').prop('checked',status);
 })
@@ -127,5 +135,36 @@ $('#userBox').on('change','.userStatus',function () {
         selectAll.prop('checked',true);
     }else{
         selectAll.prop('checked',false);
+    }
+
+    //如果选中的复选框的数量大于0 说明有选中的复选框
+    if(inputs.filter(':checked').length >0){
+        //显示批量删除按钮
+        deleteMany.show();
+    }else{
+        //隐藏批量删除按钮
+        deleteMany.hide();
+    }
+});
+
+//为批量删除按钮添加点击事件
+deleteMany.on('click',function () {  
+    var ids = [];
+    //把选中的用户筛选出来
+    var checkeduser = $('#userBox').find('input').filter(':checked');
+    //循环复选框 从复选框元素的身上获取data-id属性的值
+    checkeduser.each(function (index,element) {
+        //把element转换成jquery元素。然后调用attr方法，获取到data-id的值
+        ids.push($(element).attr('data-id'));
+    });
+    if(confirm('确认删除？')){
+        $.ajax({
+            type: "delete",
+            //join是将数组元素之间用括号内字符串连接。转换成字符串
+            url: "/users/"+ids.join('-'),
+            success: function () {
+                location.reload();
+            }
+        });
     }
 })

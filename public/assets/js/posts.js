@@ -12,12 +12,7 @@ $.ajax({
     }
 });
 
-//处理日期时间格式
-function formateDate(date) {  
-    //将日期时间字符串转换成日期对象
-    date = new Date(date);
-    return date.getFullYear() + '-' + (date.getMonth() +1) + '-' + date.getDate();
-}
+
 //分页
 function changePage(page) {  
     // alert(page)
@@ -71,5 +66,23 @@ $('#filterForm').on('submit',function () {
     });
     //阻止表单默认行为
     return false;
+});
+
+//当删除按钮被点击的时候
+$('#postsBox').on('click','.delete',function () {  
+    //弹出删除确认框。确认是否真的删除
+    if(confirm('确认删除？')){
+        //获取到管理员要删除的文章id
+        var id = $(this).attr('data-id');
+        // console.log(id);
+        //向服务器端发送请求
+        $.ajax({
+            type: "delete",
+            url: "/posts/"+id,
+            success: function (response) {
+                location.reload();
+            }
+        });
+    }
 })
 

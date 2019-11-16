@@ -14,3 +14,24 @@ $('#logout').on('click', function() {
         });
     }
 })
+
+//处理日期时间格式
+function formateDate(date) {  
+    //将日期时间字符串转换成日期对象
+    date = new Date(date);
+    return date.getFullYear() + '-' + (date.getMonth() +1) + '-' + date.getDate();
+};
+
+//向服务器端发送请求 索要登录用户信息
+$.ajax({
+    type: "get",
+    //检查用户登录的文件返回了一个用户ID
+    url: "/users/"+userId,
+    success: function (response) {
+        // console.log(response);
+        //设置头像
+        $('.avatar').attr('src',response.avatar);
+        //设置昵称
+        $('.profile .name').html(response.nickName);
+    }
+});

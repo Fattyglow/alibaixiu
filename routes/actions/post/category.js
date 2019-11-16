@@ -7,5 +7,6 @@ module.exports = async (req, res) => {
 	// 查询用户信息
 	const posts = await Post.find({category: id}).populate('author', '-password').populate('category');
 	// 响应
+	
 	res.send(posts);
 }

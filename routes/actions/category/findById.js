@@ -15,6 +15,8 @@ module.exports = async (req, res) => {
 	// 通过验证
 	// 查询用户信息
 	const category = await Category.findById(id);
+	console.log(category);
+	
 	// 响应
 	return res.send(category);
 	
